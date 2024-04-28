@@ -32,6 +32,7 @@ import { Label } from '@/components/ui/label';
 import { Plus } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
+import { createTodoAction } from '../../actions/todo.actions';
 import { formSchema } from '../../schema';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -47,10 +48,13 @@ const AddTodoForm = () => {
       completed: false,
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const { title, body, priority, completed } = values;
+      await createTodoAction({ title, body, priority, completed });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
