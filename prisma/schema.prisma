@@ -1,0 +1,23 @@
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_STRING")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Todo {
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    title     String
+    body      String?
+    priority  Priority? @default(low)
+    completed Boolean?  @default(false)
+    createdAt DateTime  @default(now())
+}
+
+enum Priority {
+    high
+    medium
+    low
+}
