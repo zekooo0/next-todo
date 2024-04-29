@@ -30,15 +30,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus } from 'lucide-react';
+import Spinner from './Spinner';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { createTodoAction } from '../../actions/todo.actions';
 import { formSchema } from '../../schema';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const AddTodoForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,15 +55,24 @@ const AddTodoForm = () => {
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setIsPending(true);
       const { title, body, priority, completed } = values;
       await createTodoAction({ title, body, priority, completed });
     } catch (err) {
       console.log(err);
+    } finally {
+      form.setValue('title', '');
+      form.setValue('body', '');
+      form.setValue('priority', 'low');
+      form.setValue('completed', false);
+
+      setIsPending(false);
+      setIsOpen(false);
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <Plus /> Add Todo
@@ -148,7 +162,7 @@ const AddTodoForm = () => {
                 </FormItem>
               )}
             />
-            <Button>Add Todo</Button>
+            <Button>{isPending ? <Spinner /> : 'Add Todo'}</Button>
           </form>
         </Form>
       </DialogContent>

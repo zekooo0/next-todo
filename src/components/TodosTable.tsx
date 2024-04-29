@@ -1,7 +1,4 @@
-'use client';
-
-import { ITodo, TPriority } from '../../interfaces';
-import { Pen, Trash } from 'lucide-react';
+import { Square, SquareCheck } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -13,7 +10,9 @@ import {
 } from '@/components/ui/table';
 
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
+import { ITodo } from '../../interfaces';
+import TabelActionButtons from './TabelActionButtons';
+import { Toggle } from './ui/toggle';
 
 const TodosTable = ({ todos }: { todos: ITodo[] }) => {
   const todosFinished = todos.filter((todo: ITodo) => todo.completed !== false);
@@ -21,31 +20,36 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="">Title</TableHead>
+          <TableHead >Title</TableHead>
           <TableHead>Priority</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="">Actions</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {todos.map((todo: ITodo) => (
           <TableRow key={todo.id}>
-            <TableCell className="font-medium">{todo.title}</TableCell>
-            <TableCell>{todo.priority}</TableCell>
+            <TableCell
+              className={`font-medium ${todo.completed ? 'line-through' : ''}`}
+            >
+              {todo.title}
+            </TableCell>
+            <TableCell>
+              <Badge> {todo.priority}</Badge>
+            </TableCell>
             <TableCell>
               {todo.completed ? (
-                <Badge variant={'secondary'}>Completed</Badge>
+                <Toggle aria-label="Toggle square-check">
+                  <SquareCheck />
+                </Toggle>
               ) : (
-                <Badge>Uncompleted</Badge>
+                <Toggle aria-label="Toggle square">
+                  <Square />
+                </Toggle>
               )}
             </TableCell>
-            <TableCell className="flex items-center space-x-2 ml-auto">
-              <Button size={'sm'}>
-                <Pen />
-              </Button>
-              <Button variant={'destructive'} size={'sm'}>
-                <Trash />
-              </Button>
+            <TableCell className="text-right flex items-center space-x-2 ml-auto">
+              <TabelActionButtons id={todo.id} />
             </TableCell>
           </TableRow>
         ))}
