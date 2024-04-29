@@ -16,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Pen, Plus } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -25,47 +26,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { createTodoAction, updateTodoAction } from '../../actions/todo.actions';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Plus } from 'lucide-react';
 import Spinner from './Spinner';
 import { Switch } from '@/components/ui/switch';
+import { TPriority } from '../../interfaces';
 import { Textarea } from '@/components/ui/textarea';
-import { createTodoAction } from '../../actions/todo.actions';
 import { formSchema } from '../../schema';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const AddTodoForm = ({ userId }: { userId: string }) => {
+const EditTodoForm = ({
+  todo,
+}: {
+  todo: { id: string; title: string; body: string; priority: TPriority };
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      body: '',
-      priority: 'low',
-      completed: false,
+      title: todo.title,
+      body: todo.body,
+      priority: todo.priority,
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsPending(true);
-      const { title, body, priority, completed } = values;
-      await createTodoAction({ title, body, priority, completed, userId });
+      const { title, body, priority } = values;
+      await updateTodoAction({
+        id: todo.id,
+        title,
+        body: body ?? '',
+        priority,
+      });
     } catch (err) {
       console.log(err);
     } finally {
-      form.setValue('title', '');
-      form.setValue('body', '');
-      form.setValue('priority', 'low');
-      form.setValue('completed', false);
-
       setIsPending(false);
       setIsOpen(false);
     }
@@ -74,13 +78,13 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Plus /> Add Todo
+        <Button size={'icon'}>
+          <Pen />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Todo</DialogTitle>
+          <DialogTitle>Edit Todo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -141,28 +145,8 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="completed"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel />
-                  <FormControl>
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="completed"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                      <Label htmlFor="completed">Completed</Label>
-                    </div>
-                  </FormControl>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button>{isPending ? <Spinner /> : 'Add Todo'}</Button>
+
+            <Button>{isPending ? <Spinner /> : 'Edit'}</Button>
           </form>
         </Form>
       </DialogContent>
@@ -170,4 +154,4 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
   );
 };
 
-export default AddTodoForm;
+export default EditTodoForm;

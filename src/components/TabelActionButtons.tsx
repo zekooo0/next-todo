@@ -4,10 +4,16 @@ import { Pen, Trash } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { Button } from './ui/button';
+import EditTodoForm from './EditTodoForm';
 import Spinner from './Spinner';
+import { TPriority } from '../../interfaces';
 import { deleteTodoAction } from '../../actions/todo.actions';
 
-const TabelActionButtons = ({ id }: { id: string }) => {
+const TabelActionButtons = ({
+  todo,
+}: {
+  todo: { id: string; title: string; body: string; priority: TPriority };
+}) => {
   const [isPending, setIsPending] = useState(false);
 
   const deleteTodo = async (id: string) => {
@@ -22,13 +28,11 @@ const TabelActionButtons = ({ id }: { id: string }) => {
   };
   return (
     <>
-      <Button size={'icon'}>
-        <Pen />
-      </Button>
+      <EditTodoForm todo={todo} />
       <Button
         variant={'destructive'}
         size={'icon'}
-        onClick={() => deleteTodo(id)}
+        onClick={() => deleteTodo(todo.id)}
       >
         {isPending ? <Spinner /> : <Trash />}
       </Button>
