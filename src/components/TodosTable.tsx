@@ -74,13 +74,15 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
                     : todo.priority === 'medium'
                     ? 'bg-yellow-700'
                     : 'bg-lime-700'
-                }  w-20 flex items-center justify-center`}
+                }  w-20 flex items-center justify-center hover:cursor-default `}
               >
                 <p className="text-white">{todo.priority}</p>
               </Badge>
             </TableCell>
             <TableCell
-              className="hover:cursor-pointer"
+              className={
+                soundPlayed ? 'hover:cursor-progress' : 'hover:cursor-pointer'
+              }
               onClick={() => onStatusChange(todo)}
             >
               {todo.completed ? <SquareCheck /> : <Square />}
@@ -95,11 +97,13 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
         <TableRow>
           <TableCell colSpan={3}>Todos Finished</TableCell>
           <TableCell colSpan={3} className="text-lg">
-            {todosFinished.length / todos.length === 1 ? (
-              <CircleCheck className="text-green-600" />
-            ) : (
-              `${todosFinished.length} / ${todos.length}`
-            )}
+            {todos.length > 0 &&
+              (todosFinished.length / todos.length === 1 ? (
+                <CircleCheck className="text-green-600" />
+              ) : (
+                `${todosFinished.length} / ${todos.length}`
+              ))}
+            {todos.length === 0 && 'You have no todos yet!'}
           </TableCell>
         </TableRow>
       </TableFooter>
