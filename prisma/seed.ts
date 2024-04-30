@@ -8,6 +8,7 @@ async function main() {
     data: Array.from({ length: 20 }, () => ({
       title: faker.lorem.sentence(),
       body: faker.lorem.paragraph(),
+      userId: 'any userId',
     })),
   });
 
