@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/table';
 
 import { Badge } from './ui/badge';
+import { Checkbox } from './ui/checkbox';
 import { TPriority } from '../../interfaces';
 import TabelActionButtons from './TabelActionButtons';
 import { Toggle } from './ui/toggle';
@@ -79,13 +80,12 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
                 <p className="text-white">{todo.priority}</p>
               </Badge>
             </TableCell>
-            <TableCell
-              className={
-                soundPlayed ? 'hover:cursor-progress' : 'hover:cursor-pointer'
-              }
-              onClick={() => onStatusChange(todo)}
-            >
-              {todo.completed ? <SquareCheck /> : <Square />}
+            <TableCell onClick={() => onStatusChange(todo)}>
+              <Checkbox
+                checked={todo.completed}
+                disabled={soundPlayed}
+                className="w-5 h-5"
+              />
             </TableCell>
             <TableCell className="text-right flex items-center space-x-2 ml-auto w-fit">
               <TabelActionButtons todo={todo} />
