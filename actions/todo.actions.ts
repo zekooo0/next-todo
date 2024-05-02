@@ -13,13 +13,19 @@ export const getTodoListAction = async (userId: string) => {
   });
   return todos;
 };
-export const createTodoAction = async (
-  title: string,
-  body: string,
-  priority: IPriority,
-  completed: boolean,
-  userId: string
-) => {
+export const createTodoAction = async ({
+  title,
+  body,
+  priority,
+  completed,
+  userId,
+}: {
+  title: string;
+  body: string;
+  priority: IPriority;
+  completed: boolean;
+  userId: string;
+}) => {
   await prisma.todo.create({
     data: {
       title,

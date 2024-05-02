@@ -57,7 +57,13 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
     try {
       setIsPending(true);
       const { title, body, priority, completed } = values;
-      await createTodoAction(title, body, priority, completed, userId);
+      await createTodoAction({
+        title,
+        body: body ?? "",
+        priority,
+        completed: completed ?? false,
+        userId,
+      });
     } catch (err) {
       console.log(err);
     } finally {
