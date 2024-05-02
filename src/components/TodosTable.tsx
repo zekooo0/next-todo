@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { CircleCheck, Square, SquareCheck } from 'lucide-react';
+import { IPriority, ITodo } from "../../interfaces";
 import {
   Table,
   TableBody,
@@ -9,24 +9,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
-import { Badge } from './ui/badge';
-import { Checkbox } from './ui/checkbox';
-import { TPriority } from '../../interfaces';
-import TabelActionButtons from './TabelActionButtons';
-import { Toggle } from './ui/toggle';
-import { updateTodoStatusAction } from '../../actions/todo.actions';
-import { useState } from 'react';
-
-interface ITodo {
-  id: string;
-  title: string;
-  body: string;
-  completed: boolean;
-  userId: string;
-  priority: TPriority;
-}
+import { Badge } from "./ui/badge";
+import { Checkbox } from "./ui/checkbox";
+import { CircleCheck } from "lucide-react";
+import TabelActionButtons from "./TabelActionButtons";
+import { updateTodoStatusAction } from "../../actions/todo.actions";
+import { useState } from "react";
 
 const TodosTable = ({ todos }: { todos: ITodo[] }) => {
   const todosFinished = todos.filter((todo) => todo.completed !== false);
@@ -36,13 +26,10 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
     try {
       setSoundPlayed(true);
       if (!todo.completed && !soundPlayed) {
-        const audio = new Audio('/audio/todo-ring.mp3');
+        const audio = new Audio("/audio/todo-ring.mp3");
         audio.play();
       }
-      await updateTodoStatusAction({
-        id: todo.id as string,
-        status: !todo.completed,
-      });
+      await updateTodoStatusAction({ id: todo.id, status: !todo.completed });
     } catch (err) {
       console.log(err);
     } finally {
@@ -63,18 +50,18 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
         {todos.map((todo) => (
           <TableRow key={todo.id}>
             <TableCell
-              className={`font-medium ${todo.completed ? 'line-through' : ''}`}
+              className={`font-medium ${todo.completed ? "line-through" : ""}`}
             >
               {todo.title}
             </TableCell>
             <TableCell>
               <Badge
                 className={`${
-                  todo.priority === 'high'
-                    ? 'bg-red-700'
-                    : todo.priority === 'medium'
-                    ? 'bg-yellow-700'
-                    : 'bg-lime-700'
+                  todo.priority === "high"
+                    ? "bg-red-700"
+                    : todo.priority === "medium"
+                    ? "bg-yellow-700"
+                    : "bg-lime-700"
                 }  w-20 flex items-center justify-center hover:cursor-default `}
               >
                 <p className="text-white">{todo.priority}</p>
@@ -103,7 +90,7 @@ const TodosTable = ({ todos }: { todos: ITodo[] }) => {
               ) : (
                 `${todosFinished.length} / ${todos.length}`
               ))}
-            {todos.length === 0 && 'You have no todos yet!'}
+            {todos.length === 0 && "You have no todos yet!"}
           </TableCell>
         </TableRow>
       </TableFooter>

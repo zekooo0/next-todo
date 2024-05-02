@@ -8,13 +8,13 @@ generator client {
 }
 
 model Todo {
-    id        String     @id @default(auto()) @map("_id") @db.ObjectId
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
     title     String
-    body      String?
-    priority  IPriority? @default(low)
-    completed Boolean?   @default(false)
+    body      String    @default("")
+    priority  IPriority @default(low)
+    completed Boolean   @default(false)
     userId    String
-    createdAt DateTime   @default(now())
+    createdAt DateTime  @default(now())
 }
 
 enum IPriority {

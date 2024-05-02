@@ -1,13 +1,14 @@
-import AddTodoForm from '@/components/AddTodoForm';
-import Footer from '@/components/Footer';
-import { Separator } from '@/components/ui/separator';
-import TodosTable from '@/components/TodosTable';
-import { auth } from '@clerk/nextjs/server';
-import { getTodoListAction } from '../../actions/todo.actions';
+import AddTodoForm from "@/components/AddTodoForm";
+import Footer from "@/components/Footer";
+import { Separator } from "@/components/ui/separator";
+import TodosTable from "@/components/TodosTable";
+import { auth } from "@clerk/nextjs/server";
+import { getTodoListAction } from "../../actions/todo.actions";
 
 export default async function Home() {
-  const { userId } = auth();
-  const todos = await getTodoListAction({ userId: userId as string });
+  const { userId: id } = auth();
+  const userId: string = id ? id : "";
+  const todos = await getTodoListAction(userId);
 
   return (
     <main className="flex flex-col justify-between min-h-screen container">

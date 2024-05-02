@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -15,7 +15,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -24,21 +24,21 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Plus } from 'lucide-react';
-import Spinner from './Spinner';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { createTodoAction } from '../../actions/todo.actions';
-import { formSchema } from '../../schema';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Plus } from "lucide-react";
+import Spinner from "./Spinner";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { createTodoAction } from "../../actions/todo.actions";
+import { formSchema } from "../../schema";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddTodoForm = ({ userId }: { userId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +47,9 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      body: '',
-      priority: 'low',
+      title: "",
+      body: "",
+      priority: "low",
       completed: false,
     },
   });
@@ -57,14 +57,14 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
     try {
       setIsPending(true);
       const { title, body, priority, completed } = values;
-      await createTodoAction({ title, body, priority, completed, userId });
+      await createTodoAction(title, body, priority, completed, userId);
     } catch (err) {
       console.log(err);
     } finally {
-      form.setValue('title', '');
-      form.setValue('body', '');
-      form.setValue('priority', 'low');
-      form.setValue('completed', false);
+      form.setValue("title", "");
+      form.setValue("body", "");
+      form.setValue("priority", "low");
+      form.setValue("completed", false);
 
       setIsPending(false);
       setIsOpen(false);
@@ -162,7 +162,7 @@ const AddTodoForm = ({ userId }: { userId: string }) => {
                 </FormItem>
               )}
             />
-            <Button>{isPending ? <Spinner /> : 'Add Todo'}</Button>
+            <Button>{isPending ? <Spinner /> : "Add Todo"}</Button>
           </form>
         </Form>
       </DialogContent>

@@ -1,19 +1,15 @@
-'use client';
+"use client";
 
-import { Pen, Trash } from 'lucide-react';
-import React, { useState } from 'react';
+import { IPriority, ITodo } from "../../interfaces";
+import { Pen, Trash } from "lucide-react";
+import React, { useState } from "react";
 
-import { Button } from './ui/button';
-import EditTodoForm from './EditTodoForm';
-import Spinner from './Spinner';
-import { TPriority } from '../../interfaces';
-import { deleteTodoAction } from '../../actions/todo.actions';
+import { Button } from "./ui/button";
+import EditTodoForm from "./EditTodoForm";
+import Spinner from "./Spinner";
+import { deleteTodoAction } from "../../actions/todo.actions";
 
-const TabelActionButtons = ({
-  todo,
-}: {
-  todo: { id: string; title: string; body: string; priority: TPriority };
-}) => {
+const TabelActionButtons = ({ todo }: { todo: ITodo }) => {
   const [isPending, setIsPending] = useState(false);
 
   const deleteTodo = async (id: string) => {
@@ -30,8 +26,8 @@ const TabelActionButtons = ({
     <>
       <EditTodoForm todo={todo} />
       <Button
-        variant={'destructive'}
-        size={'icon'}
+        variant={"destructive"}
+        size={"icon"}
         onClick={() => deleteTodo(todo.id)}
       >
         {isPending ? <Spinner /> : <Trash />}

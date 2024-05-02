@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -15,8 +15,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Pen, Plus } from 'lucide-react';
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -25,27 +24,22 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { createTodoAction, updateTodoAction } from '../../actions/todo.actions';
+} from "@/components/ui/select";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import Spinner from './Spinner';
-import { Switch } from '@/components/ui/switch';
-import { TPriority } from '../../interfaces';
-import { Textarea } from '@/components/ui/textarea';
-import { formSchema } from '../../schema';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from "@/components/ui/button";
+import { ITodo } from "../../interfaces";
+import { Input } from "@/components/ui/input";
+import { Pen } from "lucide-react";
+import Spinner from "./Spinner";
+import { Textarea } from "@/components/ui/textarea";
+import { formSchema } from "../../schema";
+import { updateTodoAction } from "../../actions/todo.actions";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const EditTodoForm = ({
-  todo,
-}: {
-  todo: { id: string; title: string; body: string; priority: TPriority };
-}) => {
+const EditTodoForm = ({ todo }: { todo: ITodo }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
@@ -64,7 +58,7 @@ const EditTodoForm = ({
       await updateTodoAction({
         id: todo.id,
         title,
-        body: body ?? '',
+        body: body ?? "",
         priority,
       });
     } catch (err) {
@@ -78,7 +72,7 @@ const EditTodoForm = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size={'icon'}>
+        <Button size={"icon"}>
           <Pen />
         </Button>
       </DialogTrigger>
@@ -146,7 +140,7 @@ const EditTodoForm = ({
               )}
             />
 
-            <Button>{isPending ? <Spinner /> : 'Edit'}</Button>
+            <Button>{isPending ? <Spinner /> : "Edit"}</Button>
           </form>
         </Form>
       </DialogContent>

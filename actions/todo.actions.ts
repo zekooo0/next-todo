@@ -1,31 +1,25 @@
-'use server';
+"use server";
 
-import { PrismaClient } from '@prisma/client';
-import { TPriority } from '../interfaces';
-import { revalidatePath } from 'next/cache';
+import { IPriority } from "../interfaces";
+import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
-export const getTodoListAction = async ({ userId }: { userId: string }) => {
+export const getTodoListAction = async (userId: string) => {
   const todos = prisma.todo.findMany({
     where: { userId },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
   });
   return todos;
 };
-export const createTodoAction = async ({
-  title,
-  body,
-  priority,
-  completed,
-  userId,
-}: {
-  title: string;
-  body?: string;
-  priority?: 'low' | 'medium' | 'high';
-  completed?: boolean;
-  userId: string;
-}) => {
+export const createTodoAction = async (
+  title: string,
+  body: string,
+  priority: IPriority,
+  completed: boolean,
+  userId: string
+) => {
   await prisma.todo.create({
     data: {
       title,
@@ -35,7 +29,7 @@ export const createTodoAction = async ({
       userId,
     },
   });
-  revalidatePath('/');
+  revalidatePath("/");
 };
 export const updateTodoAction = async ({
   id,
@@ -46,7 +40,7 @@ export const updateTodoAction = async ({
   id: string;
   title: string;
   body: string;
-  priority: TPriority;
+  priority: IPriority;
 }) => {
   await prisma.todo.update({
     where: { id },
@@ -56,7 +50,7 @@ export const updateTodoAction = async ({
       priority,
     },
   });
-  revalidatePath('/');
+  revalidatePath("/");
 };
 export const updateTodoStatusAction = async ({
   id,
@@ -71,10 +65,10 @@ export const updateTodoStatusAction = async ({
       completed: status,
     },
   });
-  revalidatePath('/');
+  revalidatePath("/");
 };
 
 export const deleteTodoAction = async (id: string) => {
   await prisma.todo.delete({ where: { id } });
-  revalidatePath('/');
+  revalidatePath("/");
 };
